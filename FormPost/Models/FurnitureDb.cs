@@ -9,6 +9,7 @@ namespace FormPost.Models
 
     public class FurnitureItem
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public decimal Price { get; set; }
@@ -47,6 +48,40 @@ namespace FormPost.Models
             connection.Open();
             cmd.ExecuteNonQuery();
 
+        }
+
+        public List<FurnitureItem> GetAll()
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT * FROM Furniture";
+            connection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            List<FurnitureItem> items = new List<FurnitureItem>();
+            while (reader.Read())
+            {
+                items.Add(new FurnitureItem
+                {
+                    Id = (int)reader["Id"],
+                    Color = (string)reader["Color"],
+                    Name = (string)reader["Name"],
+                    Price = (decimal)reader["Price"],
+                    QuantityInStock = (int)reader["QuantityInStock"]
+                });
+            }
+
+            return items;
+        }
+
+        public void Delete(int id)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "DELETE FROM Furniture WHERE Id = @id";
+
+            cmd.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            cmd.ExecuteNonQuery();
         }
     }
 }

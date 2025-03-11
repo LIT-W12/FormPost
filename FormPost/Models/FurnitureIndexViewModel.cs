@@ -8,5 +8,6 @@ namespace FormPost.Models
     public class FurnitureIndexViewModel
     {
         public int Count { get; set; }
+        public List<FurnitureItem> FurnitureItems { get; set; }
     }
 }

@@ -16,6 +16,37 @@
     <div class="container mt-5">
         <a href="/furniture/showadd" class="btn btn-success">Add</a>
         <h1>Total furniture amout: @Model.Count</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+
+                    <th>Name</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>In Stock</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(FurnitureItem item in Model.FurnitureItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Color</td>
+
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.QuantityInStock</td>
+                    <td>
+                        <form method="post" action="/furniture/delete">
+                            <input type="hidden" value="@item.Id" name="id" />
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

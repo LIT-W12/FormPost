@@ -16,7 +16,8 @@ namespace FormPost.Controllers
 
             return View(new FurnitureIndexViewModel
             {
-                Count = db.GetCount()
+                Count = db.GetCount(),
+                FurnitureItems = db.GetAll()
             });
         }
 
@@ -25,17 +26,19 @@ namespace FormPost.Controllers
             return View();
         }
 
-        public ActionResult Add(string name, string color, decimal price, int quantityInStock)
+        [HttpPost]
+        public ActionResult Add(FurnitureItem item)
         {
             FurnitureDb db = new FurnitureDb(Properties.Settings.Default.FurnitureConStr);
-            db.Add(new FurnitureItem
-            {
-                Name = name,
-                Color = color,
-                Price = price,
-                QuantityInStock = quantityInStock
-            });
+            db.Add(item);
+            return Redirect("/furniture/index");
+        }
 
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            FurnitureDb db = new FurnitureDb(Properties.Settings.Default.FurnitureConStr);
+            db.Delete(id);
             return Redirect("/furniture/index");
         }
     }
