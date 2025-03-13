@@ -25,6 +25,7 @@
                     <th>Price</th>
                     <th>In Stock</th>
                     <th>Delete</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,9 @@
                             <input type="hidden" value="@item.Id" name="id" />
                             <button class="btn btn-danger">Delete</button>
                         </form>
+                    </td>
+                    <td>
+                        <a href="/furniture/edit?id=@item.Id" class="btn btn-warning">Edit</a>
                     </td>
 
                 </tr>

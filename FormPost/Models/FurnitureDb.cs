@@ -22,7 +22,7 @@ namespace FormPost.Models
 
         public FurnitureDb(string connectionString)
         {
-            _connectionString = connectionString;    
+            _connectionString = connectionString;
         }
 
         public int GetCount()
@@ -73,6 +73,30 @@ namespace FormPost.Models
             return items;
         }
 
+        public FurnitureItem GetById(int id)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT * FROM Furniture WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (!reader.Read())
+            {
+                return null;
+            }
+
+            return new FurnitureItem
+            {
+                Id = (int)reader["Id"],
+                Color = (string)reader["Color"],
+                Name = (string)reader["Name"],
+                Price = (decimal)reader["Price"],
+                QuantityInStock = (int)reader["QuantityInStock"]
+            };
+        }
+
         public void Delete(int id)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
@@ -82,6 +106,23 @@ namespace FormPost.Models
             cmd.Parameters.AddWithValue("@id", id);
             connection.Open();
             cmd.ExecuteNonQuery();
+        }
+
+        public void Update(FurnitureItem item)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandText = "UPDATE Furniture SET Name = @name, Color = @color, " +
+                "Price = @price, QuantityInStock = @qty WHERE Id = @id";
+
+            cmd.Parameters.AddWithValue("@name", item.Name);
+            cmd.Parameters.AddWithValue("@color", item.Color);
+            cmd.Parameters.AddWithValue("@price", item.Price);
+            cmd.Parameters.AddWithValue("@qty", item.QuantityInStock);
+            cmd.Parameters.AddWithValue("@id", item.Id);
+            connection.Open();
+            cmd.ExecuteNonQuery();
+
         }
     }
 }
